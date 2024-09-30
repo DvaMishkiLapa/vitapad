@@ -401,14 +401,15 @@ impl VitaVirtualDevice<&ConfigBuilder> for VitaDevice {
             None
         };
 
+        // TODO: accelerometer axes are swapped.
         // Convert the vita accel range [-1.0, 1.0] to the dualshock 4 range [-32768, 32768]
         let accel_x_i16 = Self::f32_to_i16(report.motion.accelerometer.x, -1.0, 1.0);
-        let accel_y_i16 = Self::f32_to_i16(report.motion.accelerometer.y, -1.0, 1.0);
+        let accel_y_i16 = Self::f32_to_i16(-report.motion.accelerometer.y, -1.0, 1.0);
         let accel_z_i16 = Self::f32_to_i16(report.motion.accelerometer.z, -1.0, 1.0);
 
         // Convert the vita gyro range [-35.0, 35.0] to the dualshock 4 range [-32768, 32768]
         let gyro_x_i16 =  Self::f32_to_i16(report.motion.gyro.x, -35.0, 35.0);
-        let gyro_y_i16 =  Self::f32_to_i16(report.motion.gyro.y, -35.0, 35.0);
+        let gyro_y_i16 =  Self::f32_to_i16(-report.motion.gyro.y, -35.0, 35.0); //inverted
         let gyro_z_i16 =  Self::f32_to_i16(report.motion.gyro.z, -35.0, 35.0);
 
         let report = DS4ReportExBuilder::new()
@@ -419,11 +420,11 @@ impl VitaVirtualDevice<&ConfigBuilder> for VitaDevice {
             .buttons(buttons)
             .touch_reports(touchpad, None, None)
             .gyro_x(gyro_x_i16)
-            .gyro_y(gyro_y_i16)
-            .gyro_z(gyro_z_i16)
-            .accel_x(accel_z_i16)
-            .accel_y(accel_x_i16)
-            .accel_z(accel_y_i16)
+            .gyro_y(gyro_z_i16)
+            .gyro_z(gyro_y_i16)
+            .accel_x(accel_x_i16)
+            .accel_y(accel_y_i16)
+            .accel_z(accel_z_i16)
             .trigger_l(pwr_trigger_l)
             .trigger_r(pwr_trigger_r)
             .build();
