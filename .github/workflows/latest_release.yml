@@ -5,7 +5,6 @@ on:
     branches:
       - main
       - dev
-      - virustotal
     paths-ignore:
       - '**/*.md'
       - 'docs/**'
@@ -16,7 +15,6 @@ on:
     branches:
       - main
       - dev
-      - virustotal
     paths-ignore:
       - '**/*.md'
       - 'docs/**'
@@ -32,7 +30,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Create development latest release
-      if: ${{ github.event_name != 'pull_request' && github.ref == 'refs/heads/virustotal' }}
+      if: ${{ github.event_name != 'pull_request' && github.ref == 'refs/heads/dev' }}
       uses: "slord399/action-automatic-releases@v1.0.1"
       with:
         repo_token: "${{ secrets.GITHUB_TOKEN }}"
